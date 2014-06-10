@@ -9,7 +9,7 @@ License: GPLv2
 A Form Processor for Caldera Forms that sets a form as a metabox for post types.
 
 == Description ==
-A Free addon processor for Caldera Forms that allows you to use a form as a Custom Metabox. Entries are saved as custom fields using the field slug as the meta key.
+A Free addon processor for [Caldera Forms](http://wordpress.org/plugins/caldera-forms/) that allows you to use a form as a Custom Metabox. Entries are saved as custom fields using the field slug as the meta key.
 
 Using the advanced conditional logic, allows you to make great progressive metaboxes.
 

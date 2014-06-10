@@ -1,0 +1,11 @@
+.postbox-container .control-label {
+  display: block;
+  margin: 8px 0 12px;
+  font-weight: bold;
+}
+.postbox-container .help-block {
+  font-size: 13px;
+  font-style: italic;	
+  color: #A5A5A5;
+  margin: 2px 0 5px;
+}

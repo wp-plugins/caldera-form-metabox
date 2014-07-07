@@ -3,7 +3,7 @@
  * Plugin Name: Caldera Form Metabox
  * Plugin URI:  
  * Description: Caldera Form Processor to use a form as a Custom Metabox.
- * Version:     1.0.0
+ * Version:     1.0.1
  * Author:      David Cramer
  * Author URI:  
  * License:     GPL-2.0+
@@ -64,9 +64,14 @@ function cf_form_as_metabox_prevent_redirect($url, $data, $form){
 	return false;
 }
 
-function cf_form_as_metabox_save_meta_data($data, $config, $raw, $form){
+function cf_form_as_metabox_save_meta_data($config, $form){
 	global $post;
+	if(!is_admin()){
+		return;
+	}
 	
+	$data = Caldera_Forms::get_submission_data($form);
+
 	$field_toremove = array();
 	foreach($data as $key=>$value){
 		foreach($form['fields'] as $field){
@@ -74,9 +79,12 @@ function cf_form_as_metabox_save_meta_data($data, $config, $raw, $form){
 		}
 	}
 	foreach($data as $key=>$value){
-		update_post_meta( $post->ID, $key, $value );
-		if(isset($field_toremove[$key])){
-			unset($field_toremove[$key]);
+		if(empty($form['fields'][$key])){
+			continue;
+		}
+		update_post_meta( $post->ID, $form['fields'][$key]['slug'], $value );
+		if(isset($field_toremove[$form['fields'][$key]['slug']])){
+			unset($field_toremove[$form['fields'][$key]['slug']]);
 		}
 	}
 	if(!empty($field_toremove)){
@@ -166,9 +174,10 @@ function cf_form_as_metabox_get_meta_data($data, $form){
 
 
 function cf_form_as_metabox_save_post(){
-
-	if(isset($_POST['_cf_frm_id'])){
-		Caldera_Forms::process_submission();
+	if(is_admin()){
+		if(isset($_POST['_cf_frm_id'])){
+			Caldera_Forms::process_submission();
+		}
 	}
 }
 

@@ -3,7 +3,7 @@
  * Plugin Name: Caldera Form Metabox
  * Plugin URI:  
  * Description: Caldera Form Processor to use a form as a Custom Metabox.
- * Version:     1.0.1
+ * Version:     1.0.2
  * Author:      David Cramer
  * Author URI:  
  * License:     GPL-2.0+
@@ -99,12 +99,21 @@ function cf_form_as_metabox_save_meta_data($config, $form){
 
 function cf_form_as_metabox() {
 	$forms = get_option( '_caldera_forms' );
+	if(empty($forms)){
+		return;
+	}
 	foreach($forms as $form){
 
 		if(!empty($form['is_metabox'])){
 			$form = get_option($form['ID']);
 			// is metabox processor
 			if(!empty($form['processors'][$form['is_metabox']]['config']['posttypes'])){
+				
+				// add filter to get details of entry
+				add_filter('caldera_forms_get_entry_detail', 'cf_form_as_metabox_get_post_details', 10, 3);
+
+				// add filter to remove submit buttons
+				add_filter('caldera_forms_render_setup_field', 'cf_form_as_metabox_submit_button_removal');
 
 				foreach( $form['processors'][$form['is_metabox']]['config']['posttypes'] as $screen=>$enabled){
 					add_meta_box(
@@ -176,6 +185,10 @@ function cf_form_as_metabox_get_meta_data($data, $form){
 function cf_form_as_metabox_save_post(){
 	if(is_admin()){
 		if(isset($_POST['_cf_frm_id'])){
+
+			// add filter to get details of entry
+			add_filter('caldera_forms_get_entry_detail', 'cf_form_as_metabox_get_post_details', 10, 3);
+
 			Caldera_Forms::process_submission();
 		}
 	}
@@ -189,7 +202,7 @@ function cf_form_as_metabox_render($post, $args){
 	add_filter('caldera_forms_render_get_entry', 'cf_form_as_metabox_get_meta_data', 10, 2);
 
 	ob_start();
-	echo Caldera_Forms::render_form($args['id'], 'true');
+	echo Caldera_Forms::render_form($args['id'], 259);
 	$form = str_replace('<form', '<div', ob_get_clean());
 	$form = str_replace('</form>', '</div>', $form);
 
@@ -197,8 +210,26 @@ function cf_form_as_metabox_render($post, $args){
 
 }
 
+function cf_form_as_metabox_get_post_details($details, $entry, $form){
+	global $post;
+	
+    return array(
+    	'id' 		=> $post->ID,
+    	'form_id' 	=> $form['ID'],
+    	'user_id' 	=> get_current_user_id(),
+    	'datestamp'	=> $post->post_date
+    );
+}
 
-
+function cf_form_as_metabox_submit_button_removal($field){
+	if($field['type'] === 'button'){
+		$field['config']['class'] .= ' button';
+		if( $field['config']['type'] === 'submit' ){
+			return false;
+		}
+	}
+	return $field;
+}
 
 
 

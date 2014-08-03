@@ -3,7 +3,7 @@
  * Plugin Name: Caldera Form Metabox
  * Plugin URI:  
  * Description: Caldera Form Processor to use a form as a Custom Metabox.
- * Version:     1.0.2
+ * Version:     1.0.3
  * Author:      David Cramer
  * Author URI:  
  * License:     GPL-2.0+
@@ -21,7 +21,7 @@ add_filter('caldera_forms_get_form_processors', 'register_metabox_processor');
 // admin filters & actions
 if(is_admin()){
 	// disable redirect
-	add_filter('caldera_forms_redirect', 'cf_form_as_metabox_prevent_redirect', 1, 4);
+	add_filter('caldera_forms_redirect_url', 'cf_form_as_metabox_prevent_redirect', 1, 4);
 	// save action to disable mailer
 	add_action('caldera_forms_save_form_register', 'cf_form_as_metabox_save_form');
 
@@ -175,7 +175,7 @@ function cf_form_as_metabox_get_meta_data($data, $form){
 	global $post;
 	$entry = array();
 	foreach($form['fields'] as $fieldslug=>$field){		
-		$entry[$field['slug']] = get_post_meta($post->ID, $field['slug'], true);
+		$entry[$fieldslug] = get_post_meta($post->ID, $field['slug'], true);
 	}
 	return $entry;
 }
@@ -185,7 +185,6 @@ function cf_form_as_metabox_get_meta_data($data, $form){
 function cf_form_as_metabox_save_post(){
 	if(is_admin()){
 		if(isset($_POST['_cf_frm_id'])){
-
 			// add filter to get details of entry
 			add_filter('caldera_forms_get_entry_detail', 'cf_form_as_metabox_get_post_details', 10, 3);
 

@@ -12,7 +12,7 @@
 .caldera-grid ol.breadcrumb {
   background: none repeat scroll 0 0 #f4f4f4;
   list-style: none outside none;
-  margin: -6px -12px 0;
+  margin: -18px -12px 6px;
   padding: 0;
 }
 .caldera-grid .breadcrumb > li {
@@ -39,7 +39,7 @@
   background: none repeat scroll 0 0 #f4f4f4;
   float: none;
   list-style: none outside none;
-  margin: -6px -12px;
+  margin: -14px -12px 6px;
   padding: 0;
   width: auto;
 }

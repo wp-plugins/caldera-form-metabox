@@ -3,7 +3,7 @@ Contributors: Desertsnowman
 Tags: Custom metabox, caldera forms, form as metabox, custom metaboxes, custom fields, custom field, form custom field
 Requires at least: 3.9
 Tested up to: 3.9.1
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2
 
 A Form Processor for Caldera Forms that sets a form as a metabox for post types.
@@ -33,6 +33,11 @@ none yet.
 2. Using conditional logic to make great progressive metaboxes.
 
 == Changelog ==
+
+= 1.0.4 =
+* Compatibility for CF 1.9+
+* Dont allow ajax based forms for metabox
+
 1.0.3: Compatibility for CF 1.1.0
 1.0.2: Multi page compatibility
 1.0.1: compatibility with CF 1.0.4

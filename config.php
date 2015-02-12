@@ -34,5 +34,5 @@
 		</select>
 	</div>
 </div>
-<p class="description"><?php echo __('Note: This processor disables the Notification Mailer and Internal Entry capture.', 'caldera-forms-metabox'); ?></p>
+<p class="description"><?php echo __('Note: This processor disables the Notification Mailer, Ajax and Internal Entry capture.', 'caldera-forms-metabox'); ?></p>
 <input type="hidden" value="{{_id}}" name="config[is_metabox]">

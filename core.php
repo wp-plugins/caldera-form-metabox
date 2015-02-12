@@ -3,7 +3,7 @@
  * Plugin Name: Caldera Form Metabox
  * Plugin URI:  
  * Description: Caldera Form Processor to use a form as a Custom Metabox.
- * Version:     1.0.3
+ * Version:     1.0.4
  * Author:      David Cramer
  * Author URI:  
  * License:     GPL-2.0+
@@ -29,8 +29,15 @@ if(is_admin()){
 
 function cf_form_as_metabox_save_form($form){
 	if(!empty($form['is_metabox'])){
+		
 		// disable DB support
 		$form['db_support'] = 0;
+		
+		// no ajax forms
+		if( isset( $form['form_ajax'] ) ){
+			unset( $form['form_ajax'] );
+		}
+		
 		// disable mailer
 		$form['mailer']['enable_mailer'] = 0;
 
@@ -161,10 +168,12 @@ function cf_form_as_metabox() {
 			}
 
 			// if depts been set- scripts are used - 
-			wp_enqueue_script( 'cf-frontend-script-init', CFCORE_URL . 'assets/js/frontend-script-init.js', array('jquery'), null, true);
+			wp_enqueue_script( 'cf-frontend-fields', CFCORE_URL . 'assets/js/fields.min.js', array('jquery'), null, true);
+			wp_enqueue_script( 'cf-frontend-script-init', CFCORE_URL . 'assets/js/frontend-script-init.min.js', array('jquery'), null, true);
 
 			// metabox & gridcss
 			wp_enqueue_style( 'cf-metabox-grid-styles', plugin_dir_url(__FILE__) . '/css/metagrid.css');
+			wp_enqueue_style( 'cf-metabox-field-styles', CFCORE_URL . 'assets/css/fields.min.css');
 			wp_enqueue_style( 'cf-metabox-styles', plugin_dir_url(__FILE__) . '/css/metabox.css');
 		}
 	}

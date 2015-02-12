@@ -2,7 +2,7 @@
 Contributors: Desertsnowman
 Tags: Custom metabox, caldera forms, form as metabox, custom metaboxes, custom fields, custom field, form custom field
 Requires at least: 3.9
-Tested up to: 3.9.1
+Tested up to: 4.1
 Stable tag: 1.0.4
 License: GPLv2
 

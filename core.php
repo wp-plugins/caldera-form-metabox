@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: Caldera Form Metabox
+ * Plugin Name: Caldera Custom Fields
  * Plugin URI:  
- * Description: Caldera Form Processor to use a form as a Custom Metabox.
- * Version:     1.0.4
+ * Description: Create custom fields with powerful conditionals and processors using a Caldera Forms as the metabox designer.
+ * Version:     1.0.5
  * Author:      David Cramer
  * Author URI:  
  * License:     GPL-2.0+
@@ -54,8 +54,8 @@ function cf_form_as_metabox_save_form($form){
 
 function register_metabox_processor($processors){
 	$processors['cf_asmetabox'] = array(
-		"name"				=>	__('Form as Metabox', 'caldera-forms-metabox'),
-		"description"		=>	__("Use form as a metabox", 'caldera-forms-metabox'),
+		"name"				=>	__('Caldera Custom Fields', 'caldera-forms-metabox'),
+		"description"		=>	__("Convert a form into a Custom Fields Manager", 'caldera-forms-metabox'),
 		"single"			=>	true,
 		"processor"			=>	'cf_form_as_metabox_save_meta_data',
 		"template"			=>	plugin_dir_path(__FILE__) . "config.php",
@@ -193,11 +193,15 @@ function cf_form_as_metabox_get_meta_data($data, $form){
 
 function cf_form_as_metabox_save_post(){
 	if(is_admin()){
-		if(isset($_POST['_cf_frm_id'])){
-			// add filter to get details of entry
-			add_filter('caldera_forms_get_entry_detail', 'cf_form_as_metabox_get_post_details', 10, 3);
+		if(isset($_POST['cf_metabox_forms'])){
 
-			Caldera_Forms::process_submission();
+			foreach( $_POST['cf_metabox_forms'] as $metaForm ){
+				// add filter to get details of entry
+				$_POST['_cf_frm_id'] = $metaForm;
+				add_filter('caldera_forms_get_entry_detail', 'cf_form_as_metabox_get_post_details', 10, 3);
+				Caldera_Forms::process_submission();
+
+			}
 		}
 	}
 }
@@ -214,6 +218,9 @@ function cf_form_as_metabox_render($post, $args){
 	$form = str_replace('<form', '<div', ob_get_clean());
 	$form = str_replace('</form>', '</div>', $form);
 
+	// register this form for processing'
+	echo '<input type="hidden" name="cf_metabox_forms[]" value="' . $args['id'] . '">';
+	
 	echo $form;
 
 }

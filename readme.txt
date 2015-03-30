@@ -1,12 +1,12 @@
-=== Caldera Form Metabox ===
+=== Caldera Custom Fields ===
 Contributors: Desertsnowman
 Tags: Custom metabox, caldera forms, form as metabox, custom metaboxes, custom fields, custom field, form custom field
 Requires at least: 3.9
 Tested up to: 4.1
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv2
 
-A Form Processor for Caldera Forms that sets a form as a metabox for post types.
+A Form Processor for Caldera Forms that sets a form as a metabox for custom fields.
 
 == Description ==
 A Free addon processor for [Caldera Forms](http://wordpress.org/plugins/caldera-forms/) that allows you to use a form as a Custom Metabox. Entries are saved as custom fields using the field slug as the meta key.
@@ -33,6 +33,9 @@ none yet.
 2. Using conditional logic to make great progressive metaboxes.
 
 == Changelog ==
+
+= 1.0.5 =
+* Support to handle multiple form metaboxes
 
 = 1.0.4 =
 * Compatibility for CF 1.9+

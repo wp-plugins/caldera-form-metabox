@@ -26,11 +26,12 @@ add_filter( 'caldera_forms_get_addons', 'cf_custom_fields_savetoposttype_addon' 
 function cf_custom_fields_posttype_process($processors){
 
 	$processors['post_type'] = array(
-		"name"				=>	__( 'Custom Fields: Save as Post Type', 'caldera-custom-fields' ),
-		"author"            =>  'David Cramer for CalderaWP LLC',
+		"name"				=>	__( 'Save as Post Type', 'caldera-custom-fields' ),
+		"author"            =>  'David Cramer',
 		"description"		=>	__( 'Store form entries as a post with custom fields.', 'caldera-custom-fields' ),
 		"post_processor"	=>	'cf_custom_fields_capture_entry',
 		"template"			=>	trailingslashit( CCF_PATH ) . "includes/to-post-type-config.php",
+		"icon"				=>	CCF_URL . "/post-type.png",
 		"default"			=>	array(
 			'post_status'	=>	"draft"
 		),
@@ -346,7 +347,20 @@ function cf_custom_fields_capture_entry($config, $form){
 				cf_custom_fields_attach_file( $file , $entry_id );
 			}
 		}
-		update_post_meta( $entry_id, $form['fields'][$field]['slug'], $value );
+
+		$slug = $form['fields'][$field]['slug'];
+
+		/**
+		 * Filter value before saving using to post type processor
+		 *
+		 * @since 2.0.3
+		 *
+		 * @param mixed $value The value to be saved
+		 * @param string $slug Slug of field
+		 * @param int $entry ID of post
+		 */
+		$value = apply_filters( 'cf_custom_fields_pre_save_meta_key_to_post_type', $value, $slug, $entry_id );
+		update_post_meta( $entry_id, $slug, $value );
 	}
 
 	return array('Post ID' => $entry_id, 'ID' => $entry_id, 'permalink' => get_permalink( $entry_id ) );

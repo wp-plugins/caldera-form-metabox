@@ -34,8 +34,8 @@ if( is_admin() ){
  */
 function cf_custom_fields_register_metabox_processor($processors){
 	$processors['cf_asmetabox'] = array(
-		"name"				=>	__( 'Custom Fields: Post Metabox', 'caldera-custom-fields' ),
-		"author"            =>  'David Cramer for CalderaWP LLC',
+		"name"				=>	__( 'Custom Fields Post Metabox', 'caldera-custom-fields' ),
+		"author"            =>  'David Cramer',
 		"description"		=>	__( 'Use a form as a custom metabox in the post editor.', 'caldera-custom-fields' ),
 		"single"			=>	true,
 		"processor"			=>	'cf_custom_fields_save_meta_data',
@@ -132,7 +132,19 @@ function cf_custom_fields_save_meta_data($config, $form){
 		if(empty($form['fields'][$key])){
 			continue;
 		}
-		update_post_meta( $post->ID, $form['fields'][$key]['slug'], $value );
+
+		$slug = $form['fields'][$field]['slug'];
+
+		/**
+		 * Filter value before saving using to metabox processor
+		 * @since 2.0.3
+		 *
+		 * @param mixed $value The value to be saved
+		 * @param string $slug Slug of field
+		 * @param int $post_id ID of post
+		 */
+		$value = apply_filters( 'cf_custom_fields_pre_save_meta_key_metabox', $value, $slug, $post->ID );
+		update_post_meta( $post->ID, $slug, $value );
 		if(isset($field_toremove[$form['fields'][$key]['slug']])){
 			unset($field_toremove[$form['fields'][$key]['slug']]);
 		}
@@ -222,9 +234,9 @@ function cf_custom_fields_form_as_metabox() {
 			wp_enqueue_script( 'cf-frontend-script-init', CFCORE_URL . 'assets/js/frontend-script-init.min.js', array('jquery'), null, true);
 
 			// metabox & gridcss
-			wp_enqueue_style( 'cf-metabox-grid-styles', plugin_dir_url(__FILE__) . '/css/metagrid.css');
+			wp_enqueue_style( 'cf-metabox-grid-styles', CCF_URL . 'css/metagrid.css');
 			wp_enqueue_style( 'cf-metabox-field-styles', CFCORE_URL . 'assets/css/fields.min.css');
-			wp_enqueue_style( 'cf-metabox-styles', plugin_dir_url(__FILE__) . '/css/metabox.css');
+			wp_enqueue_style( 'cf-metabox-styles', CCF_URL . 'css/metabox.css');
 		}
 	}
 
